@@ -1,10 +1,12 @@
-const mongoose=require("mongoose");
-
-const urlSchema=new mongoose.Schema({
+import { mongoose } from "mongoose";
+import { nanoid } from "nanoid";
+const urlSchema=new mongoose.Schema(
+    {
     shortId:{
         type:String,
         required:true,
         unique:true,
+        default: () => nanoid(8),
     },
     redirectURL:{
         type:String,
@@ -15,4 +17,4 @@ const urlSchema=new mongoose.Schema({
   {timestamps:true}
 );
 const URL = mongoose.model("url",urlSchema);
-module.exports=URL;
+export default URL;

@@ -1,27 +1,28 @@
-const shortid = require("shortid");
-const URL=require("../models/url");
+import { nanoid } from "nanoid";
+import URL from "../models/url.js"; // Make sure to add .js extension if using ES modules
 
-async function handleGenerateNewShortURL(req,res){
-    const body=req.body;
-    if(!body.url) return res.status(400).json({err:"Url is required"});
-    const shortID=shortid();
+export async function handleGenerateNewShortURL(req, res) {
+    const body = req.body;
+    if (!body.url) return res.status(400).json({ err: "Url is required" });
+    
+    const shortID = nanoid(8);
+    
     await URL.create({
-        shortId:shortID,
-        redirectURL:body.url,
-        visitHistory:[],
-    })
-    return res.render("home",{id:shortID,});
-}
-async function handleAnalytics(req,res){
-    const shortId=req.param.shortId;
-    const result=await URL.findOne({shortId});
-    return res.json({
-        totalClicks:result.visitHistory.length,
-        analytics:result.visitHistory,
-    })
+        shortId: shortID,
+        redirectURL: body.url,
+        visitHistory: [],
+    });
+    
+    return res.render("home", { id: shortID });
 }
 
-module.exports={
-    handleGenerateNewShortURL,
-    handleAnalytics
+export async function handleAnalytics(req, res) {
+    const shortId = req.params.shortId;
+    
+    const result = await URL.findOne({ shortId });
+    
+    return res.json({
+        totalClicks: result.visitHistory.length,
+        analytics: result.visitHistory,
+    });
 }

@@ -1,5 +1,5 @@
-const express=require("express");
-const URL = require("../models/url");
+import express from "express";
+import URL from "../models/url.js";
 const router=express.Router();
 
 router.get("/",async (req,res)=>
@@ -10,6 +10,4 @@ router.get("/",async (req,res)=>
     });
 });
 
-
-
-module.exports=router;
+export default router;
